@@ -1,0 +1,30 @@
+name: Publish
+
+permissions:
+  contents: write
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  pyinstaller-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+            python-version: '3.13'
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile Compile.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: kf_compile_tool
+            path: dist/Compile.exe
